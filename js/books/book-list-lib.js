@@ -11,6 +11,7 @@ class StarList extends React.Component {
 			rating     : props.rating,
 			starTotal  : props.parameters.starTotal,
 			step       : props.parameters.step,
+            content    : props.parameters.character.repeat(props.parameters.starTotal),
 			percentage : 0
 		}
         this.setPercentage(this.status.rating * 100 / this.status.starTotal);
@@ -20,20 +21,20 @@ class StarList extends React.Component {
    		this.content = (
             <div 
                 className="stars-outer"
-                onMouseMove={(event) => this.changeStars(event)} 
-                onMouseOut={this.revert} 
-                onClick={this.setRating}
+                //onMouseMove={(event) => this.changeStars(event)} 
+                //onMouseOut={this.revert} 
+                onMouseDown={(event) => this.setRating(event)}
                 ref={outerRef => { 
                     this.outerDiv = outerRef; 
                 }}
-                >
+                >{this.status.content}
                 <div 
                 	className="stars-inner"
                 	ref={innerRef => { 
                     	this.innerDiv = innerRef; 
                 	}}
                     style = {{width : `${this.status.percentage.toString(10)}%`}}
-                ></div>
+                >{this.status.content}</div>
             </div>
         );
    }
@@ -61,10 +62,13 @@ class StarList extends React.Component {
 		this.showStars();
 	}
 		
-	setRating(){
+	setRating(event){
+		const rect = this.outerDiv.getBoundingClientRect();
+		this.setPercentage((event.clientX - rect.left) * 100 / rect.width)
 		this.status.rating = (this.status.percentage * this.status.starTotal / 100).toFixed(2);
         let result = bookListData.filter(book => book.id == this.status.bookid);
         result[0].rating = this.status.rating;
+		this.showStars();
 	}
 
 	render() { 
@@ -155,7 +159,7 @@ function changeRuleBeforeLoading(sheetsIDs, rulesToChange,  newString){
 }
 
 function bookListRun(list, view){
-    const books = <BookList bookList={list} parameters={{starTotal: starTotal, step:step, view:view}} />;
+    const books = <BookList bookList={list} parameters={{starTotal: starTotal, step:step, view:view, character: "\uf005"}} />;
     ReactDOM.render(
         books, 
         document.getElementById("bookList")

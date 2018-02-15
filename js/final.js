@@ -3,11 +3,11 @@ pagedBookList.view = 0;
 pagedBookList.pageNo = 0;
 var bookList = pagedBookList.page;
 
-changeRuleBeforeLoading(
-    ["#css-ratings"],
-    ['.stars-outer::before', '.stars-inner::before'],
-    "\\f005"
-);
+//changeRuleBeforeLoading(
+//    ["#css-ratings"],
+//    ['.stars-outer::before', '.stars-inner::before'],
+//    "\\f005"
+//);
 //changeRatingRuleBeforeLoading(['.stars-inner::before'], `"${"\\f005".repeat(starTotal)}"`);
 
 bookListRun(bookList, 0);

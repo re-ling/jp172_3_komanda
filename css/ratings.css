@@ -11,27 +11,27 @@
 }
 
 .stars-outer, .stars-outer::before, .stars-inner, .stars-inner::before {
+    color: gold;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
 .stars-outer {
-    padding: 0;
+    cursor:pointer;
     display: inline-block;
     position: relative;
     font-family: "Font Awesome Regular";
     letter-spacing: normal;
 }
-  
+ 
+/* 
 .stars-outer::before {
-    padding: 0;
     content: '\f005';
     color: gold;
-}
+}*/
   
 .stars-inner {
-    margin: 0;
     position: absolute;
     top: 0;
     left: 0;
@@ -41,9 +41,8 @@
     width: 0;
 }
   
-.stars-inner::before {
-    margin: 0;
+/*.stars-inner::before {
     content: '\f005';
     color: gold;
-}
+}*/
   
