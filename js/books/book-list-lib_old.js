@@ -9,45 +9,78 @@ class StarList extends React.Component {
             content    : props.parameters.character.repeat(props.parameters.starTotal),
 			percentage : 0
 		}
-        this.setPercentage = this.setPercentage.bind(this);
+        this.newPercentage = this.newPercentage.bind(this);
         this.changeStars = this.changeStars.bind(this);
+        this.showStars = this.showStars.bind(this);
         this.revert = this.revert.bind(this);
         this.setRating = this.setRating.bind(this);
- 		this.state.percentage = this.setPercentage(props.rating * 100 / props.parameters.starTotal)
+        this.newPercentage(this.state.rating * 100 / this.state.starTotal);
+   		this.outerDivId = this.state.bookid + "stars";
    		this.outerDiv = null;
    		this.innerDiv = null;
-   }
+/*    		this.content = (
+            <div 
+                className="stars-outer"
+                //onMouseMove={(event) => this.changeStars(event)} 
+                //onMouseOut={this.revert} 
+                onMouseDown={(event) => this.setRating(event)}
+                ref={outerRef => { 
+                    this.outerDiv = outerRef; 
+                }}
+                >{this.state.content}
+                <div 
+                	className="stars-inner"
+                	ref={innerRef => { 
+                    	this.innerDiv = innerRef; 
+                	}}
+                    style = {{width : `${this.state.percentage.toString(10)}%`}}
+                >{this.state.content}</div>
+            </div>
+        );
+ */    }
 	
-	setPercentage(newPercentage){
-		if (newPercentage < 0) newPercentage = 0;
-		if (newPercentage > 100) newPercentage = 100;
-		return Math.round(newPercentage / this.state.step) * this.state.step;
+	newPercentage(newPercent){
+		if (newPercent < 0) newPercent = 0;
+		if (newPercent > 100) newPercent = 100;
+		return Math.round(newPercent / this.state.step) * this.state.step;
 	}
 
+    showStars(){
+    	//document.querySelector(`#rating-num`).innerHTML = (percentage * starTotal / 100).toFixed(2); 
+    	this.innerDiv.style.width = `${this.state.percentage.toString(10)}%`;
+    }
+	
 	changeStars(event) {
 		const rect = this.outerDiv.getBoundingClientRect();
-		this.setState({ percentage : this.setPercentage((event.clientX - rect.left) * 100 / rect.width) });
+		this.setState({percentage : this.newPercentage(
+            (event.clientX - rect.left) * 100 / rect.width)
+        })
+		this.showStars();
 	}
 		
 	revert(){
-		this.setState({ percentage : this.setPercentage(this.state.rating * 100 / this.state.starTotal) });
+		this.setState({percentage : this.newPercentage(
+            this.state.rating * 100 / this.state.starTotal
+        )})
+		this.showStars();
 	}
 		
 	setRating(event){
 		const rect = this.outerDiv.getBoundingClientRect();
-		const percentage = this.setPercentage((event.clientX - rect.left) * 100 / rect.width)
-		const rating = (this.state.percentage * this.state.starTotal / 100).toFixed(2);
+		const newPercent = this.newPercentage((event.clientX - rect.left) * 100 / rect.width);
+        const newRating = (this.state.percentage * this.state.starTotal / 100).toFixed(2);
+		this.setState({percentage : newPercent, rating : newRating});
         let result = bookListData.filter(book => book.id == this.state.bookid);
-        result[0].rating = rating;
-        this.setState({ rating : rating, percentage : percentage });
+        result[0].rating = this.state.rating;
+		this.showStars();
 	}
 
 	render() { 
         return (
             <div 
                 className="stars-outer"
-                onMouseMove={(event) => this.changeStars(event)} 
-                onMouseOut={this.revert} 
+                //onMouseMove={(event) => this.changeStars(event)} 
+                //onMouseOut={this.revert} 
                 onMouseDown={(event) => this.setRating(event)}
                 ref={outerRef => { 
                     this.outerDiv = outerRef; 
