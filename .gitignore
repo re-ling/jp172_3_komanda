@@ -4,3 +4,4 @@ Thumbs.db
 *.code-workspace
 *.lnk
 *.vscode
+**/node_modules/
